@@ -1,0 +1,569 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <title>SoundPlot README</title>
+        <style>
+            body { 
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
+                max-width: 900px; 
+                margin: 40px auto; 
+                padding: 20px; 
+                line-height: 1.6; 
+                color: #333;
+                background: #fff;
+            }
+            h1 { color: #2196F3; border-bottom: 2px solid #2196F3; padding-bottom: 10px; }
+            h2 { color: #1976D2; border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-top: 30px; }
+            h3 { color: #0D47A1; margin-top: 25px; }
+            
+            /* Inline code */
+            code { 
+                background: #e8e8e8; 
+                color: #c7254e;
+                padding: 2px 6px; 
+                border-radius: 3px; 
+                font-family: Consolas, Monaco, monospace;
+                font-size: 0.9em;
+            }
+            
+            /* Code blocks - LIGHT THEME for readability */
+            pre { 
+                background: #f6f8fa; 
+                border: 1px solid #e1e4e8;
+                padding: 16px; 
+                border-radius: 6px; 
+                overflow-x: auto; 
+                font-size: 13px;
+                line-height: 1.5;
+            }
+            pre code { 
+                background: transparent; 
+                color: #24292e;
+                padding: 0;
+                font-size: inherit;
+            }
+            
+            /* Tables */
+            table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+            th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+            th { background: #2196F3; color: white; }
+            tr:nth-child(even) { background: #f9f9f9; }
+            
+            /* Other elements */
+            blockquote { 
+                border-left: 4px solid #2196F3; 
+                margin: 15px 0; 
+                padding-left: 15px; 
+                color: #666; 
+                background: #f9f9f9;
+            }
+            hr { border: none; border-top: 1px solid #ddd; margin: 30px 0; }
+            a { color: #1976D2; }
+        </style>
+    </head>
+    <body><h1 id="soundplot-birdsong-acoustic-analysis-system">🐦 SoundPlot: Birdsong Acoustic Analysis System</h1>
+
+<p><a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.9+-3776AB?logo=python&logoColor=white" alt="Python" /></a>
+<a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License" /></a></p>
+
+<blockquote>
+  <p><em>Turning birdsong into geometry to reveal the hidden structure of natural acoustic communication.</em></p>
+</blockquote>
+
+<h2 id="overview">📖 Overview</h2>
+
+<p>SoundPlot is an audio analysis system that transforms birdsong recordings into measurable acoustic features and maps them into multi-dimensional space. By converting sound into geometry, patterns emerge that no human ear could reliably detect at scale—revealing the internal logic of natural soundscapes.</p>
+
+<h3 id="what-this-system-does">What This System Does</h3>
+
+<ol>
+<li><strong>Extracts Acoustic Features</strong> from audio: pitch contours, rhythm patterns, repetition structures, and spectral textures</li>
+<li><strong>Maps Sounds into Multi-dimensional Space</strong> using dimensionality reduction techniques</li>
+<li><strong>Discovers Patterns and Clusters</strong> where similar calls group together</li>
+<li><strong>Identifies Motifs and Transitions</strong> showing how sounds relate across time, regions, and species</li>
+</ol>
+
+<hr />
+
+<h2 id="technology-stack">🛠️ Technology Stack</h2>
+
+<h3 id="core-audio-processing">Core Audio Processing</h3>
+
+<table>
+<thead>
+<tr>
+  <th>Library</th>
+  <th>Version</th>
+  <th>Purpose</th>
+  <th>Why We Use It</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>Librosa</strong></td>
+  <td>0.10+</td>
+  <td>Audio feature extraction</td>
+  <td>The gold standard for audio analysis in Python. Provides battle-tested implementations of MFCCs, spectral features, pitch tracking, and beat detection. Built on NumPy for performance.</td>
+</tr>
+<tr>
+  <td><strong>SoundFile</strong></td>
+  <td>0.12+</td>
+  <td>Audio I/O</td>
+  <td>Robust reading/writing of audio files (WAV, FLAC, OGG). Works seamlessly with librosa and handles edge cases that other libraries miss.</td>
+</tr>
+<tr>
+  <td><strong>NumPy</strong></td>
+  <td>1.24+</td>
+  <td>Numerical computing</td>
+  <td>Foundation for all array operations. Every audio signal becomes a NumPy array for efficient vectorized processing.</td>
+</tr>
+<tr>
+  <td><strong>SciPy</strong></td>
+  <td>1.11+</td>
+  <td>Signal processing</td>
+  <td>Advanced signal processing (filtering, FFT, peak detection). Complements librosa for custom audio transformations.</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="machine-learning-pattern-discovery">Machine Learning &amp; Pattern Discovery</h3>
+
+<table>
+<thead>
+<tr>
+  <th>Library</th>
+  <th>Version</th>
+  <th>Purpose</th>
+  <th>Why We Use It</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>Scikit-learn</strong></td>
+  <td>1.3+</td>
+  <td>Clustering &amp; ML</td>
+  <td>Industry-standard ML library. Provides K-Means, DBSCAN, and HDBSCAN for clustering, plus PCA for dimensionality reduction. Excellent documentation and reliability.</td>
+</tr>
+<tr>
+  <td><strong>UMAP-learn</strong></td>
+  <td>0.5+</td>
+  <td>Dimensionality reduction</td>
+  <td>Superior to t-SNE for preserving both local and global structure. Creates more meaningful 2D/3D projections of high-dimensional feature spaces.</td>
+</tr>
+<tr>
+  <td><strong>HDBSCAN</strong></td>
+  <td>0.8+</td>
+  <td>Density-based clustering</td>
+  <td>Automatically determines the number of clusters and handles noise. Perfect for discovering natural groupings in acoustic data without predefining cluster count.</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="data-management">Data Management</h3>
+
+<table>
+<thead>
+<tr>
+  <th>Library</th>
+  <th>Version</th>
+  <th>Purpose</th>
+  <th>Why We Use It</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>Pandas</strong></td>
+  <td>2.0+</td>
+  <td>Data manipulation</td>
+  <td>Tabular data handling for feature datasets. Easy filtering, grouping, and export to various formats.</td>
+</tr>
+<tr>
+  <td><strong>PyArrow</strong></td>
+  <td>14+</td>
+  <td>Efficient storage</td>
+  <td>Parquet file format for storing millions of feature vectors efficiently. 10x faster than CSV with better compression.</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h2 id="aiml-models-algorithms">🧠 AI/ML Models &amp; Algorithms</h2>
+
+<h3 id="1-feature-extraction-pipeline">1. Feature Extraction Pipeline</h3>
+
+<h4 id="mel-frequency-cepstral-coefficients-mfccs"><strong>Mel-Frequency Cepstral Coefficients (MFCCs)</strong></h4>
+
+<pre><code>Audio Signal → Pre-emphasis → Windowing → FFT → Mel Filter Bank → Log → DCT → MFCCs
+</code></pre>
+
+<p><strong>Why MFCCs?</strong>
+- Designed to mimic human auditory perception
+- Capture timbral characteristics that distinguish different bird species/call types
+- Compact representation (typically 13-20 coefficients per frame)
+- Proven effectiveness in speech and animal vocalization analysis</p>
+
+<h4 id="spectral-features"><strong>Spectral Features</strong></h4>
+
+<table>
+<thead>
+<tr>
+  <th>Feature</th>
+  <th>Description</th>
+  <th>What It Reveals</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Spectral Centroid</td>
+  <td>"Center of mass" of the spectrum</td>
+  <td>Brightness/tonal quality of the call</td>
+</tr>
+<tr>
+  <td>Spectral Bandwidth</td>
+  <td>Width of the spectral distribution</td>
+  <td>Richness/complexity of harmonics</td>
+</tr>
+<tr>
+  <td>Spectral Rolloff</td>
+  <td>Frequency below which 85% of energy lies</td>
+  <td>Distinguishes noisy vs tonal sounds</td>
+</tr>
+<tr>
+  <td>Spectral Contrast</td>
+  <td>Difference between peaks and valleys</td>
+  <td>Harmonic structure clarity</td>
+</tr>
+<tr>
+  <td>Zero Crossing Rate</td>
+  <td>Rate of sign changes in the signal</td>
+  <td>Percussive vs sustained sounds</td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="pitch-tracking-f0-estimation"><strong>Pitch Tracking (F0 Estimation)</strong></h4>
+
+<p>We use <strong>pYIN</strong> (probabilistic YIN) algorithm:
+- Based on the YIN autocorrelation method but adds probabilistic modeling
+- Handles the polyphonic nature of birdsong better than simple peak-picking
+- Provides confidence scores for pitch estimates
+- Robust to noise and overlapping sounds</p>
+
+<h4 id="rhythm-temporal-features"><strong>Rhythm &amp; Temporal Features</strong></h4>
+
+<table>
+<thead>
+<tr>
+  <th>Feature</th>
+  <th>Algorithm</th>
+  <th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Onset Detection</td>
+  <td>Spectral flux + peak-picking</td>
+  <td>Find when notes/calls start</td>
+</tr>
+<tr>
+  <td>Beat Tracking</td>
+  <td>Dynamic programming</td>
+  <td>Detect rhythmic patterns</td>
+</tr>
+<tr>
+  <td>Tempo Estimation</td>
+  <td>Autocorrelation of onset envelope</td>
+  <td>Overall pace of vocalizations</td>
+</tr>
+<tr>
+  <td>Inter-onset Intervals</td>
+  <td>Custom analysis</td>
+  <td>Timing patterns between calls</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h3 id="2-dimensionality-reduction">2. Dimensionality Reduction</h3>
+
+<h4 id="umap-uniform-manifold-approximation-and-projection"><strong>UMAP (Uniform Manifold Approximation and Projection)</strong></h4>
+
+<p><strong>Why UMAP over t-SNE or PCA?</strong></p>
+
+<table>
+<thead>
+<tr>
+  <th>Method</th>
+  <th>Pros</th>
+  <th>Cons</th>
+  <th>Best For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>PCA</strong></td>
+  <td>Fast, deterministic</td>
+  <td>Only captures linear relationships</td>
+  <td>Initial exploration, preprocessing</td>
+</tr>
+<tr>
+  <td><strong>t-SNE</strong></td>
+  <td>Good local structure</td>
+  <td>Slow, loses global structure</td>
+  <td>Small datasets (&lt;10K points)</td>
+</tr>
+<tr>
+  <td><strong>UMAP</strong></td>
+  <td>Fast, preserves global AND local structure</td>
+  <td>Requires tuning</td>
+  <td>Our use case: large-scale birdsong analysis</td>
+</tr>
+</tbody>
+</table>
+
+<p><strong>How UMAP Works (Simplified):</strong>
+1. Build a weighted graph of nearest neighbors in high-dimensional space
+2. Optimize a low-dimensional representation to preserve these relationships
+3. Result: Similar sounds cluster together, dissimilar sounds stay apart</p>
+
+<p><strong>Our UMAP Configuration:</strong></p>
+
+<div class="codehilite">
+<pre><span></span><code><span class="n">umap</span><span class="o">.</span><span class="n">UMAP</span><span class="p">(</span>
+    <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>      <span class="c1"># Balance local vs global structure</span>
+    <span class="n">min_dist</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>        <span class="c1"># How tightly clusters can pack</span>
+    <span class="n">n_components</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>      <span class="c1"># 3D for rich visualization</span>
+    <span class="n">metric</span><span class="o">=</span><span class="s1">&#39;cosine&#39;</span>      <span class="c1"># Angular distance for audio features</span>
+<span class="p">)</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h3 id="3-clustering-algorithms">3. Clustering Algorithms</h3>
+
+<h4 id="hdbscan-hierarchical-density-based-spatial-clustering"><strong>HDBSCAN (Hierarchical Density-Based Spatial Clustering)</strong></h4>
+
+<p><strong>Why HDBSCAN?</strong>
+- <strong>No need to specify number of clusters</strong>: Discovers natural groupings automatically
+- <strong>Handles noise</strong>: Labels outliers separately instead of forcing them into clusters
+- <strong>Varying densities</strong>: Works when some call types are common and others are rare
+- <strong>Hierarchical</strong>: Can explore clustering at different granularities</p>
+
+<p><strong>How It Works:</strong>
+1. Build a minimum spanning tree based on mutual reachability distance
+2. Construct a hierarchy of connected components
+3. Extract stable clusters that persist across different density thresholds</p>
+
+<p><strong>Configuration:</strong></p>
+
+<div class="codehilite">
+<pre><span></span><code><span class="n">hdbscan</span><span class="o">.</span><span class="n">HDBSCAN</span><span class="p">(</span>
+    <span class="n">min_cluster_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>      <span class="c1"># Minimum calls to form a cluster</span>
+    <span class="n">min_samples</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>            <span class="c1"># Core point density</span>
+    <span class="n">cluster_selection_epsilon</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">metric</span><span class="o">=</span><span class="s1">&#39;euclidean&#39;</span>
+<span class="p">)</span>
+</code></pre>
+</div>
+
+<h4 id="k-means-optional-for-comparison"><strong>K-Means (Optional, for comparison)</strong></h4>
+
+<ul>
+<li>Used when you want to specify exact number of clusters</li>
+<li>Useful for known taxonomies (e.g., "find 5 distinct call types")</li>
+<li>Faster than HDBSCAN for very large datasets</li>
+</ul>
+
+<hr />
+
+<h3 id="4-pattern-motif-detection">4. Pattern &amp; Motif Detection</h3>
+
+<h4 id="sequence-analysis"><strong>Sequence Analysis</strong></h4>
+
+<p>We analyze temporal patterns using:</p>
+
+<ol>
+<li><strong>Transition Matrices</strong>: Track which call types follow which others</li>
+<li><strong>N-gram Analysis</strong>: Find common sequences (pairs, triplets, etc.)</li>
+<li><strong>DTW (Dynamic Time Warping)</strong>: Compare call shapes even at different speeds</li>
+</ol>
+
+<h4 id="motif-discovery"><strong>Motif Discovery</strong></h4>
+
+<p>Using a sliding window approach:
+1. Extract short segments from audio
+2. Compute similarity between all pairs
+3. Group highly similar segments as "motifs"
+4. Track motif frequency and context</p>
+
+<hr />
+
+<h2 id="project-structure">📁 Project Structure</h2>
+
+<pre><code>sound_plot/
+├── README.md                 # This file
+├── requirements.txt          # Python dependencies
+├── setup.py                  # Package installation
+│
+├── src/
+│   ├── __init__.py
+│   ├── audio/
+│   │   ├── __init__.py
+│   │   ├── loader.py         # Audio file loading &amp; validation
+│   │   └── preprocessor.py   # Noise reduction, normalization
+│   │
+│   ├── features/
+│   │   ├── __init__.py
+│   │   ├── spectral.py       # Spectral feature extraction
+│   │   ├── temporal.py       # Rhythm, onset, tempo features
+│   │   ├── pitch.py          # Pitch/F0 tracking
+│   │   └── mfcc.py           # MFCC extraction
+│   │
+│   ├── analysis/
+│   │   ├── __init__.py
+│   │   ├── clustering.py     # HDBSCAN, K-Means
+│   │   ├── reduction.py      # UMAP, PCA
+│   │   ├── patterns.py       # Motif detection, transitions
+│   │   └── similarity.py     # DTW, distance metrics
+│   │
+│   └── utils/
+│       ├── __init__.py
+│       ├── io.py             # Data export (Parquet, JSON)
+│       └── visualization.py  # Static plots for verification
+│
+├── data/
+│   ├── raw/                  # Input audio files
+│   ├── processed/            # Extracted features
+│   └── results/              # Clustering results, embeddings
+│
+├── tests/
+│   ├── test_audio.py
+│   ├── test_features.py
+│   └── test_analysis.py
+│
+└── examples/
+    ├── basic_analysis.py     # Simple usage example
+    └── batch_processing.py   # Process many files
+</code></pre>
+
+<hr />
+
+<h2 id="quick-start">🚀 Quick Start</h2>
+
+<h3 id="installation">Installation</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Clone the repository</span>
+git<span class="w"> </span>clone<span class="w"> </span>https://github.com/your-username/sound_plot.git
+<span class="nb">cd</span><span class="w"> </span>sound_plot
+
+<span class="c1"># Create virtual environment</span>
+python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>venv
+<span class="nb">source</span><span class="w"> </span>venv/bin/activate<span class="w">  </span><span class="c1"># On Windows: venv\Scripts\activate</span>
+
+<span class="c1"># Install dependencies</span>
+pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</code></pre>
+</div>
+
+<h3 id="basic-usage">Basic Usage</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">src.audio</span><span class="w"> </span><span class="kn">import</span> <span class="n">AudioLoader</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">src.features</span><span class="w"> </span><span class="kn">import</span> <span class="n">FeatureExtractor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">src.analysis</span><span class="w"> </span><span class="kn">import</span> <span class="n">ClusterAnalyzer</span>
+
+<span class="c1"># Load audio</span>
+<span class="n">loader</span> <span class="o">=</span> <span class="n">AudioLoader</span><span class="p">()</span>
+<span class="n">audio</span><span class="p">,</span> <span class="n">sr</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;path/to/birdsong.wav&quot;</span><span class="p">)</span>
+
+<span class="c1"># Extract features</span>
+<span class="n">extractor</span> <span class="o">=</span> <span class="n">FeatureExtractor</span><span class="p">(</span><span class="n">sample_rate</span><span class="o">=</span><span class="n">sr</span><span class="p">)</span>
+<span class="n">features</span> <span class="o">=</span> <span class="n">extractor</span><span class="o">.</span><span class="n">extract_all</span><span class="p">(</span><span class="n">audio</span><span class="p">)</span>
+
+<span class="c1"># Analyze patterns</span>
+<span class="n">analyzer</span> <span class="o">=</span> <span class="n">ClusterAnalyzer</span><span class="p">()</span>
+<span class="n">clusters</span> <span class="o">=</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
+<span class="n">embeddings_3d</span> <span class="o">=</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">get_embeddings</span><span class="p">()</span>
+
+<span class="c1"># Export for visualization</span>
+<span class="n">analyzer</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="s2">&quot;results/analysis_output.parquet&quot;</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="output-data-format">📊 Output Data Format</h2>
+
+<h3 id="feature-vectors-per-audio-segment">Feature Vectors (per audio segment)</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;segment_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;file001_seg003&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;source_file&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;meadow_recording.wav&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;start_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">2.5</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;end_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">3.2</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;features&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;mfcc&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">13</span><span class="w"> </span><span class="err">coe</span><span class="kc">ff</span><span class="err">icie</span><span class="kc">nts</span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;spectral_centroid&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">4532.1</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;spectral_bandwidth&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1234.5</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;zero_crossing_rate&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.082</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;pitch_mean&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">2100.3</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;pitch_std&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">156.7</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;onset_count&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;tempo&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">120.5</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">&quot;embedding_3d&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">x</span><span class="p">,</span><span class="w"> </span><span class="err">y</span><span class="p">,</span><span class="w"> </span><span class="err">z</span><span class="p">],</span>
+<span class="w">  </span><span class="nt">&quot;cluster_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;cluster_probability&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.94</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="why-these-choices">🔬 Why These Choices?</h2>
+
+<h3 id="on-mfccs">On MFCCs</h3>
+
+<p>MFCCs were originally designed for human speech but work exceptionally well for birdsong because both involve harmonic structures and frequency modulation. They compress spectral information in a perceptually meaningful way.</p>
+
+<h3 id="on-umap-vs-t-sne">On UMAP vs t-SNE</h3>
+
+<p>While t-SNE is popular, UMAP is:
+- <strong>10-100x faster</strong> for large datasets
+- <strong>Better at preserving global structure</strong> (important for seeing how different species relate)
+- <strong>More stable</strong> across runs with the same random seed</p>
+
+<h3 id="on-hdbscan-vs-k-means">On HDBSCAN vs K-Means</h3>
+
+<p>Birdsong data is messy—some calls are common, others rare. K-Means forces everything into clusters and requires knowing how many clusters exist. HDBSCAN finds natural groupings and correctly identifies unusual sounds as noise.</p>
+
+<h3 id="on-librosa">On Librosa</h3>
+
+<p>Librosa is the most mature audio analysis library in Python. Alternatives like <code>torchaudio</code> are faster for deep learning but lack the comprehensive feature extraction we need. Essentia is powerful but has a steeper learning curve.</p>
+
+<hr />
+
+<h2 id="references">📚 References</h2>
+
+<ul>
+<li>McFee, B., et al. (2015). <em>librosa: Audio and Music Signal Analysis in Python</em></li>
+<li>McInnes, L., Healy, J., &amp; Melville, J. (2018). <em>UMAP: Uniform Manifold Approximation and Projection</em></li>
+<li>Campello, R. J., et al. (2013). <em>Density-Based Clustering Based on Hierarchical Density Estimates</em></li>
+<li>Stowell, D., &amp; Plumbley, M. D. (2014). <em>Automatic large-scale classification of bird sounds</em></li>
+</ul>
+
+<hr />
+
+<h2 id="license">📄 License</h2>
+
+<p>MIT License - See <a href="LICENSE">LICENSE</a> for details.</p>
+</body>
+    </html>
+    

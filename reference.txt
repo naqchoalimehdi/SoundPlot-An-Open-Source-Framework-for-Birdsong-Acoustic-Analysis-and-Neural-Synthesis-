@@ -1,0 +1,11 @@
+For the first time, nature is leaving a data trail.
+
+What we once dismissed as background noise is starting to behave like a dataset.
+
+This work takes birdsong and maps it into measurable acoustic features such as pitch, rhythm, repetition, and spectral texture. When thousands of these signals are placed into a multi-dimensional space, structure appears. Patterns repeat. Motifs return. Transitions form. What sounded random begins to look organized.
+
+The result is not a translation of what birds are saying. It is something more fundamental. A visual system that allows us to observe how sound behaves across time, regions, and species. Calls that happen during alerts cluster together. Sequences used in coordination show similar shapes. Entire soundscapes start revealing their internal logic.
+
+By turning sound into geometry, relationships emerge that no human ear could reliably detect at scale. What once required years of field listening can now be explored across millions of data points in moments.
+
+This is how a new frontier begins. Not by guessing meaning, but by revealing structure. And structure is the first step toward understanding any form of communication, human or not.

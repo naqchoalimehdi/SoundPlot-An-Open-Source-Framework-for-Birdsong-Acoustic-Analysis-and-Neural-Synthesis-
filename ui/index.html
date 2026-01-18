@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoundPlot - Analysis & Synthesis</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a0f;
+            color: #fff;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* Layout */
+        .viewport-container {
+            display: flex;
+            flex: 1;
+            position: relative;
+        }
+
+        .viewport {
+            flex: 1;
+            position: relative;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .viewport:last-child {
+            border-right: none;
+        }
+
+        canvas {
+            width: 100% !important;
+            height: 100% !important;
+            display: block;
+        }
+
+        /* Overlays */
+        .label {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 5px 15px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            pointer-events: none;
+        }
+
+        .label.original {
+            color: #00d4aa;
+            border-color: #00d4aa;
+        }
+
+        .label.synth {
+            color: #ff0066;
+            border-color: #ff0066;
+        }
+
+        /* Controls */
+        .controls-bar {
+            height: 80px;
+            background: rgba(20, 20, 30, 0.95);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            padding: 0 40px;
+            z-index: 100;
+        }
+
+        .btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 10px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn.primary {
+            background: linear-gradient(135deg, #00d4aa, #00a885);
+            border: none;
+            font-weight: 600;
+        }
+
+        .btn.primary:hover {
+            background: linear-gradient(135deg, #00e5b8, #00b892);
+            box-shadow: 0 0 15px rgba(0, 212, 170, 0.4);
+        }
+
+        .btn.original {
+            background: linear-gradient(135deg, #00d4aa, #00a885);
+            border: none;
+            font-weight: 600;
+        }
+
+        .btn.original:hover {
+            box-shadow: 0 0 15px rgba(0, 212, 170, 0.5);
+        }
+
+        .btn.original.playing {
+            animation: pulse-original 1s infinite;
+        }
+
+        .btn.synth {
+            background: linear-gradient(135deg, #ff0066, #cc0052);
+            border: none;
+            font-weight: 600;
+        }
+
+        .btn.synth:hover {
+            box-shadow: 0 0 15px rgba(255, 0, 102, 0.5);
+        }
+
+        .btn.synth.playing {
+            animation: pulse-synth 1s infinite;
+        }
+
+        @keyframes pulse-original {
+
+            0%,
+            100% {
+                box-shadow: 0 0 5px rgba(0, 212, 170, 0.5);
+            }
+
+            50% {
+                box-shadow: 0 0 20px rgba(0, 212, 170, 0.8);
+            }
+        }
+
+        @keyframes pulse-synth {
+
+            0%,
+            100% {
+                box-shadow: 0 0 5px rgba(255, 0, 102, 0.5);
+            }
+
+            50% {
+                box-shadow: 0 0 20px rgba(255, 0, 102, 0.8);
+            }
+        }
+
+        .time-display {
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            color: #00d4aa;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .downloads-section {
+            background: rgba(20, 20, 30, 0.95);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 15px 40px;
+            display: none;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .downloads-section.active {
+            display: flex;
+        }
+
+        .downloads-section a {
+            color: #00d4aa;
+            text-decoration: none;
+            padding: 8px 16px;
+            border: 1px solid #00d4aa;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .downloads-section a:hover {
+            background: rgba(0, 212, 170, 0.2);
+        }
+
+        .downloads-section .label {
+            color: #888;
+            font-size: 0.85rem;
+            position: static;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        /* Loading */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 10, 15, 0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .loading-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top-color: #00d4aa;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Status */
+        .status-text {
+            color: #888;
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Split View -->
+    <div class="viewport-container">
+        <!-- Original Audio View -->
+        <div class="viewport" id="view-original">
+            <div class="label original">Original Audio</div>
+        </div>
+
+        <!-- Synthesized Audio View -->
+        <div class="viewport" id="view-synth">
+            <div class="label synth">Synthesized Audio</div>
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls-bar">
+        <input type="file" id="file-input" accept="audio/*">
+        <button class="btn" onclick="document.getElementById('file-input').click()">
+            📁 Load Audio
+        </button>
+
+        <button class="btn original" id="play-original-btn" onclick="playOriginal()">
+            ▶ Play Original
+        </button>
+
+        <button class="btn synth" id="play-synth-btn" onclick="playSynth()">
+            ▶ Play Synthesized
+        </button>
+
+        <span class="time-display" id="time-display">0:00</span>
+
+        <button class="btn" onclick="resetAll()">
+            ↺ Reset
+        </button>
+    </div>
+
+    <!-- Downloads Section -->
+    <div class="downloads-section" id="downloads-section">
+        <span class="label">Downloads:</span>
+        <a id="dl-original" href="#" download>📥 Original Audio</a>
+        <a id="dl-synth" href="#" download>📥 Synthesized Audio</a>
+        <a id="dl-comparison" href="#" download>📊 Comparison PNG</a>
+        <a id="dl-analysis" href="#" download>📈 Analysis PNG</a>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading-overlay" id="loader">
+        <div class="spinner"></div>
+        <div class="status-text" id="status-text">Processing audio...</div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+    <script>
+        // ============================================
+        // Dual 3D Visualization System
+        // ============================================
+
+        class Visualizer3D {
+            constructor(containerId, color) {
+                this.container = document.getElementById(containerId);
+                this.baseColor = color;
+                this.points = [];
+                this.lines = [];
+                this.data = [];
+                this.currentIndex = 0;
+
+                this.initThree();
+            }
+
+            initThree() {
+                // Scene
+                this.scene = new THREE.Scene();
+                this.scene.background = new THREE.Color(0x0a0a0f);
+                this.scene.fog = new THREE.FogExp2(0x0a0a0f, 0.025);
+
+                // Camera
+                this.camera = new THREE.PerspectiveCamera(60, this.container.clientWidth / this.container.clientHeight, 0.1, 1000);
+                this.camera.position.set(12, 8, 12);
+
+                // Renderer
+                this.renderer = new THREE.WebGLRenderer({ antialias: true });
+                this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
+                this.renderer.setPixelRatio(window.devicePixelRatio);
+                this.container.appendChild(this.renderer.domElement);
+
+                // Controls
+                this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+                this.controls.enableDamping = true;
+                this.controls.autoRotate = true;
+                this.controls.autoRotateSpeed = 0.5;
+
+                // Groups
+                this.pointsGroup = new THREE.Group();
+                this.linesGroup = new THREE.Group();
+                this.scene.add(this.pointsGroup);
+                this.scene.add(this.linesGroup);
+
+                // Helpers
+                const grid = new THREE.GridHelper(20, 20, 0x222222, 0x111111);
+                this.scene.add(grid);
+
+                // Initial demo point
+                // this.addPoint(0, 0, 0);
+            }
+
+            addPoint(x, y, z, time) {
+                const size = 0.15;
+                const geometry = new THREE.SphereGeometry(size, 16, 16);
+
+                // Dynamic color based on height (z) and bandwidth (y)
+                const hue = (1.0 - (y / 10)) * 0.7; // Red to purple
+                const color = new THREE.Color().setHSL(hue, 1.0, 0.5);
+
+                const material = new THREE.MeshBasicMaterial({ color: color });
+                const sphere = new THREE.Mesh(geometry, material);
+                sphere.position.set(x, y, z);
+                sphere.userData.time = time; // Store time for highlighting
+
+                // Glow
+                const glowGeo = new THREE.SphereGeometry(size * 2.5, 16, 16);
+                const glowMat = new THREE.MeshBasicMaterial({
+                    color: color,
+                    transparent: true,
+                    opacity: 0.15,
+                    depthWrite: false
+                });
+                const glow = new THREE.Mesh(glowGeo, glowMat);
+                sphere.add(glow);
+
+                this.pointsGroup.add(sphere);
+                this.points.push(sphere);
+
+                // Line connection
+                if (this.points.length > 1) {
+                    const prev = this.points[this.points.length - 2];
+                    const lineGeo = new THREE.BufferGeometry().setFromPoints([prev.position, sphere.position]);
+                    const lineMat = new THREE.LineBasicMaterial({
+                        color: color,
+                        transparent: true,
+                        opacity: 0.4
+                    });
+                    const line = new THREE.Line(lineGeo, lineMat);
+                    this.linesGroup.add(line);
+                    this.lines.push(line);
+                }
+            }
+
+            update(currentTime) {
+                // Add points as time progresses (if not already added)
+                while (this.currentIndex < this.data.length &&
+                    this.data[this.currentIndex].time <= currentTime) {
+
+                    const p = this.data[this.currentIndex];
+                    // Map x, y, z to world coords (centered)
+                    // x=centroid, y=bandwidth, z=pitch
+                    this.addPoint(p.x - 5, p.z, p.y - 5, p.time);
+                    this.currentIndex++;
+                }
+
+                // Pulse points that correspond to the current time window
+                this.points.forEach(p => {
+                    const timeDiff = currentTime - p.userData.time;
+                    // Use a small window (300ms) for the pulse effect
+                    if (timeDiff >= 0 && timeDiff < 0.3) {
+                        const factor = 1.0 - (timeDiff / 0.3); // Linear decay
+                        const scale = 1.0 + factor * 2.0; // Grows up to 3x
+                        p.scale.set(scale, scale, scale);
+
+                        // Increase glow opacity
+                        if (p.children[0]) {
+                            p.children[0].material.opacity = 0.15 + factor * 0.7;
+                        }
+                    } else {
+                        // Reset to normal
+                        p.scale.set(1, 1, 1);
+                        if (p.children[0]) {
+                            p.children[0].material.opacity = 0.15;
+                        }
+                    }
+                });
+            }
+
+            reset() {
+                while (this.pointsGroup.children.length) {
+                    this.pointsGroup.remove(this.pointsGroup.children[0]);
+                }
+                while (this.linesGroup.children.length) {
+                    this.linesGroup.remove(this.linesGroup.children[0]);
+                }
+                this.points = [];
+                this.lines = [];
+                this.currentIndex = 0;
+            }
+
+            resize() {
+                this.camera.aspect = this.container.clientWidth / this.container.clientHeight;
+                this.camera.updateProjectionMatrix();
+                this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
+            }
+
+            render() {
+                this.controls.update();
+                this.renderer.render(this.scene, this.camera);
+            }
+        }
+
+        // ============================================
+        // App Controller
+        // ============================================
+
+        const vizOriginal = new Visualizer3D('view-original', 0x00d4aa);
+        const vizSynth = new Visualizer3D('view-synth', 0xff0066);
+
+        let audioOriginal = new Audio();
+        let audioSynth = new Audio();
+        let isPlaying = false;
+        let animationId;
+
+        // Sync cameras
+        /*   
+        vizOriginal.controls.addEventListener('change', () => {
+             vizSynth.camera.position.copy(vizOriginal.camera.position);
+             vizSynth.camera.rotation.copy(vizOriginal.camera.rotation);
+        });
+        */
+
+        // Main Loop
+        function animate() {
+            animationId = requestAnimationFrame(animate);
+
+            if (isPlaying) {
+                // Use the correct audio source for time based on what's playing
+                let time = 0;
+                if (currentlyPlaying === 'original') {
+                    time = audioOriginal.currentTime;
+                    vizOriginal.update(time);
+                    // Update synth points up to same time if already loaded
+                    if (vizSynth.data.length > 0) {
+                        vizSynth.update(time);
+                    }
+                } else if (currentlyPlaying === 'synth') {
+                    time = audioSynth.currentTime;
+                    vizSynth.update(time);
+                    // Also update original for comparison
+                    if (vizOriginal.data.length > 0) {
+                        vizOriginal.update(time);
+                    }
+                }
+
+                document.getElementById('time-display').textContent = formatTime(time);
+
+                // Check for end
+                if (currentlyPlaying === 'original' && audioOriginal.ended) {
+                    playOriginal(); // This will pause
+                } else if (currentlyPlaying === 'synth' && audioSynth.ended) {
+                    playSynth(); // This will pause
+                }
+            }
+
+            vizOriginal.render();
+            vizSynth.render();
+        }
+        animate();
+
+        // API Interaction
+        document.getElementById('file-input').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            showLoading(true, "Uploading audio...");
+
+            const formData = new FormData();
+            formData.append('audio', file);
+
+            try {
+                const response = await fetch('http://localhost:5000/api/analyze', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) throw new Error('Upload failed');
+
+                const { taskId } = await response.json();
+
+                // Start polling
+                pollStatus(taskId);
+
+            } catch (err) {
+                console.error(err);
+                alert("Error: " + err.message);
+                showLoading(false);
+            }
+        });
+
+        function pollStatus(taskId) {
+            const interval = setInterval(async () => {
+                try {
+                    const response = await fetch(`http://localhost:5000/api/status/${taskId}`);
+                    const task = await response.json();
+
+                    if (task.error) {
+                        clearInterval(interval);
+                        alert(task.status);
+                        showLoading(false);
+                        return;
+                    }
+
+                    // Update UI with detailed status
+                    showLoading(true, `${task.status} (${task.progress}%)`);
+
+                    if (task.result) {
+                        clearInterval(interval);
+                        handleAnalysisResult(task.result);
+                    }
+                } catch (err) {
+                    console.error("Polling error:", err);
+                }
+            }, 500);
+        }
+
+        function handleAnalysisResult(result) {
+            // Setup Visualization Data
+            vizOriginal.data = result.original_points;
+            vizSynth.data = result.synth_points;
+
+            // Setup Audio
+            audioOriginal.src = `http://localhost:5000${result.original_audio_url}`;
+            audioSynth.src = `http://localhost:5000${result.synth_audio_url}`;
+
+            audioOriginal.volume = 0.8;
+            audioSynth.volume = 0.8;
+
+            vizOriginal.reset();
+            vizSynth.reset();
+
+            // Populate download links
+            document.getElementById('dl-original').href = `http://localhost:5000${result.original_audio_url}`;
+            document.getElementById('dl-synth').href = `http://localhost:5000${result.synth_audio_url}`;
+
+            if (result.comparison_image_url) {
+                document.getElementById('dl-comparison').href = `http://localhost:5000${result.comparison_image_url}`;
+                document.getElementById('dl-comparison').style.display = 'inline-block';
+            }
+            if (result.analysis_image_url) {
+                document.getElementById('dl-analysis').href = `http://localhost:5000${result.analysis_image_url}`;
+                document.getElementById('dl-analysis').style.display = 'inline-block';
+            }
+
+            // Show downloads section
+            document.getElementById('downloads-section').classList.add('active');
+
+            showLoading(false);
+        }
+
+        // Tracking which audio is currently playing
+        let currentlyPlaying = null; // 'original', 'synth', or null
+
+        function playOriginal() {
+            if (vizOriginal.data.length === 0) return alert("Please load audio first!");
+
+            const btn = document.getElementById('play-original-btn');
+            const synthBtn = document.getElementById('play-synth-btn');
+
+            if (currentlyPlaying === 'original') {
+                // Pause
+                audioOriginal.pause();
+                btn.innerHTML = '▶ Play Original';
+                btn.classList.remove('playing');
+                currentlyPlaying = null;
+                isPlaying = false;
+            } else {
+                // Stop synth if playing
+                audioSynth.pause();
+                synthBtn.innerHTML = '▶ Play Synthesized';
+                synthBtn.classList.remove('playing');
+
+                // If at end, restart
+                if (audioOriginal.ended || audioOriginal.currentTime >= audioOriginal.duration) {
+                    audioOriginal.currentTime = 0;
+                }
+
+                audioOriginal.play();
+                btn.innerHTML = '⏸ Pause Original';
+                btn.classList.add('playing');
+                currentlyPlaying = 'original';
+                isPlaying = true;
+            }
+        }
+
+        function playSynth() {
+            if (vizSynth.data.length === 0) return alert("Please load audio first!");
+
+            const btn = document.getElementById('play-synth-btn');
+            const origBtn = document.getElementById('play-original-btn');
+
+            if (currentlyPlaying === 'synth') {
+                // Pause
+                audioSynth.pause();
+                btn.innerHTML = '▶ Play Synthesized';
+                btn.classList.remove('playing');
+                currentlyPlaying = null;
+                isPlaying = false;
+            } else {
+                // Stop original if playing
+                audioOriginal.pause();
+                origBtn.innerHTML = '▶ Play Original';
+                origBtn.classList.remove('playing');
+
+                // If at end, restart
+                if (audioSynth.ended || audioSynth.currentTime >= audioSynth.duration) {
+                    audioSynth.currentTime = 0;
+                }
+
+                audioSynth.play();
+                btn.innerHTML = '⏸ Pause Synthesized';
+                btn.classList.add('playing');
+                currentlyPlaying = 'synth';
+                isPlaying = true;
+            }
+        }
+
+        function resetAll() {
+            audioOriginal.pause();
+            audioSynth.pause();
+            currentlyPlaying = null;
+            isPlaying = false;
+
+            document.getElementById('play-original-btn').innerHTML = '▶ Play Original';
+            document.getElementById('play-synth-btn').innerHTML = '▶ Play Synthesized';
+            document.getElementById('play-original-btn').classList.remove('playing');
+            document.getElementById('play-synth-btn').classList.remove('playing');
+
+            vizOriginal.reset();
+            vizSynth.reset();
+            audioOriginal.currentTime = 0;
+            audioSynth.currentTime = 0;
+            document.getElementById('time-display').textContent = "0:00";
+        }
+
+        function showLoading(show, text = "Processing...") {
+            const el = document.getElementById('loader');
+            document.getElementById('status-text').textContent = text;
+            if (show) el.classList.add('active');
+            else el.classList.remove('active');
+        }
+
+        function formatTime(s) {
+            return new Date(s * 1000).toISOString().substr(14, 5);
+        }
+
+        window.addEventListener('resize', () => {
+            vizOriginal.resize();
+            vizSynth.resize();
+        });
+    </script>
+</body>
+
+</html>
