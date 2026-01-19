@@ -1,0 +1,9 @@
+cff-version: 1.1.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: Joe
+  given-names: Johnson
+orcid: https://orcid.org/0009-0003-9548-3235
+title:naqchoalimehdi/SoundPlot-An-Open-Source-Framework-for-Birdsong-Acoustic-Analysis-and-Neural-Synthesis-: SoundPlot: Birdsong Acoustic Analysis & Neural Synthesis Framework
+version: 1.0.0
+date-released: 2026-01-19
