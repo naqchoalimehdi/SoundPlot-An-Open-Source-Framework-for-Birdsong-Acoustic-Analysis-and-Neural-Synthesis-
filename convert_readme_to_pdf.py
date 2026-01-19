@@ -327,8 +327,8 @@ def convert_with_xhtml2pdf(html_content: str, output_path: Path):
 
 def main():
     """Convert README.md to PDF."""
-    readme_path = Path(__file__).parent / "README.md"
-    pdf_path = Path(__file__).parent / "README.pdf"
+    readme_path = Path(__file__).parent / "README copy.md"
+    pdf_path = Path(__file__).parent / "README copy.pdf"
     
     if not readme_path.exists():
         print(f"Error: {readme_path} not found")

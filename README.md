@@ -166,11 +166,11 @@ data/sessions/{audio_name}_{session_id}/
 ## Sample Visualizations
 
 ### Spectrogram Comparison
-![Comparison](data/comparisons/comparison.png)
+![Comparison](assets/images/comparison.png)
 *Original vs synthesized birdsong: waveforms, spectrograms, and mel spectrograms*
 
 ### Feature Space Analysis
-![Embedding](data/comparisons/embedding_comparison.png)
+![Embedding](assets/images/embedding_comparison.png)
 *PCA projection showing drift between original (blue) and synthesized (green) features*
 
 ## Technology Stack
