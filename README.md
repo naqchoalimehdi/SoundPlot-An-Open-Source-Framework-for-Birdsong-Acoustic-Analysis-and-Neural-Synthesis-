@@ -4,6 +4,7 @@
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![ORCID](https://img.shields.io/badge/ORCID-0009--0003--9548--3235-green.svg)](https://orcid.org/0009-0003-9548-3235)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18298180.svg)](https://doi.org/10.5281/zenodo.18298180)
 
 An open-source framework for analyzing birdsong recordings through acoustic feature extraction, dimensionality reduction, and neural audio synthesis. Transform audio signals into interactive 3D visualizations and compare original vs synthesized acoustic trajectories in real-time.
 
@@ -215,7 +216,8 @@ data/sessions/{audio_name}_{session_id}/
 
 | Resource | Link |
 |----------|------|
-| **Source Code** | [GitHub](https://github.com/[your-repo]/sound_plot) |
+| **Source Code** | [GitHub](https://github.com/naqchoalimehdi/SoundPlot-An-Open-Source-Framework-for-Birdsong-Acoustic-Analysis-and-Neural-Synthesis-) |
+| **Zenodo Archive** | [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18298180.svg)](https://doi.org/10.5281/zenodo.18298180) |
 | **Paper (Preprint)** | [arXiv](https://arxiv.org/) *(ID pending)* |
 | **Demo Audio** | Included in `data/` directory |
 
