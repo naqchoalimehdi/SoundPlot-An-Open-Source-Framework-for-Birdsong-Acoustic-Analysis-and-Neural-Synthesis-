@@ -227,12 +227,30 @@ If you use SoundPlot in your research, please cite:
 
 ```bibtex
 @article{mehdi2026soundplot,
-  author = {Mehdi, Naqcho Ali},
+  author = {Mehdi, Naqcho Ali and Adeel, Mohammad and Larik, Aizaz Ali},
   title = {SoundPlot: An Open-Source Framework for Birdsong Acoustic Analysis and Neural Synthesis},
   journal = {arXiv preprint arXiv:2026.XXXXX},
   year = {2026},
   url = {https://arxiv.org/abs/2026.XXXXX}
 }
+```
+
+```yaml
+# Citation File Format (CFF)
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Mehdi"
+  given-names: "Naqcho Ali"
+  orcid: "https://orcid.org/0009-0003-9548-3235"
+- family-names: "Adeel"
+  given-names: "Mohammad"
+- family-names: "Larik"
+  given-names: "Aizaz Ali"
+title: "SoundPlot: An Open-Source Framework for Birdsong Acoustic Analysis and Neural Synthesis"
+version: 1.0.0
+doi: 10.5281/zenodo.18298180
+date-released: 2026-01-19
 ```
 
 ## License
