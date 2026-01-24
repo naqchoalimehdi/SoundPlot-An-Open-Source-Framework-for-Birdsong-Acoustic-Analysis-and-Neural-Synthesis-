@@ -226,13 +226,7 @@ data/sessions/{audio_name}_{session_id}/
 If you use SoundPlot in your research, please cite:
 
 ```bibtex
-@article{mehdi2026soundplot,
-  author = {Mehdi, Naqcho Ali and Adeel, Mohammad and Larik, Aizaz Ali},
-  title = {SoundPlot: An Open-Source Framework for Birdsong Acoustic Analysis and Neural Synthesis},
-  journal = {arXiv preprint arXiv:2026.XXXXX},
-  year = {2026},
-  url = {https://arxiv.org/abs/2026.XXXXX}
-}
+Mehdi, N. A., Adeel, M., & Larik, A. A. (2026). SoundPlot: An Open-Source Framework for Birdsong Acoustic Analysis and Neural Synthesis with Interactive 3D Visualization. ArXiv. https://arxiv.org/abs/2601.12752
 ```
 
 ```yaml
